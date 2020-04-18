@@ -14,10 +14,12 @@ The transformed connectivity consistent human body dataset can be downloaded [he
 ## Usage
 The "exps" folder includes sample codes with test data of several experiments described in the paper.
 ## Citation
-Please cite the following papers if it helps your research:
-@article{Jiang2020HumanBody,
-  author    = {Jiang, Boyi and Zhang, Juyong and Cai, Jianfei and Zheng, Jianmin},
-  title     = {Disentangled Human Body Embedding Based on Deep Hierarchical Neural Network},
-  journal   = {IEEE Transactions on Visualization and Computer Graphics},
-  year      = {2020},
+Please cite the following papers if it helps your research: 
+ ```
+ @article{Jiang2020HumanBody,
+      title={Disentangled Human Body Embedding Based on Deep Hierarchical Neural Network},
+      author={Jiang, Boyi and Zhang, Juyong and Cai, Jianfei and Zheng, Jianmin},
+      booktitle={IEEE Transactions on Visualization and Computer Graphics},
+      year={2020}
 }
+``` 
