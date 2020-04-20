@@ -73,7 +73,7 @@ print('total {} meshes...'.format(num))
 
 batch_size=200
 start_id=0
-max_iters=1200
+max_iters=1600
 thred=0.002
 log_internal=50
 icp_thread=0.15
@@ -126,7 +126,7 @@ while start_id<num:
 	Rs.requires_grad=True
 	Ts.requires_grad=True
 	optimizer=optim.Adam([ss,ps,Rs,Ts], lr=0.04)
-	scheduler=optim.lr_scheduler.MultiStepLR(optimizer,milestones=[400,600,800], gamma=0.4)
+	scheduler=optim.lr_scheduler.MultiStepLR(optimizer,milestones=[600,1200,1500], gamma=0.4)
 	rec_loss=(torch.ones((1))*100.0).to(device)
 	times=0
 	print('start optimize {} to {} meshes...'.format(start_id,end_id))

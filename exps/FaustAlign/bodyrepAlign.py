@@ -19,9 +19,7 @@ import scipy
 import cv2
 
 
-parser = argparse.ArgumentParser(description='optimize for target meshs')
-# parser.add_argument('--vgan-model',default='None',metavar='M',
-#                     help='pretrained vgan model'))
+parser = argparse.ArgumentParser(description='optimize for FAUST datas')
 parser.add_argument('--gpu-id',type=int,default=0,metavar='ID',
                     help='if cuda enable, which gpu to use')
 args = parser.parse_args()
@@ -46,8 +44,6 @@ pnum=bodyrep.parts_num
 
 tri_fs=convert_f_points.face_index
 vertex_index,face_index=U.compute_connectivity_infos(om.read_trimesh('../../models/bodyTem/template.obj'),device)
-# # head top,left finger,left foot finger,right foot finger,right finger,left elbow,right elbow,nose tip,butt,left knee,right knee
-# select_landmarks=torch.from_numpy(np.array([12466,5407,105,39,5004,8668,8735,11491,4775,2687,2645],np.int64)).to(device)
 #FARM arap landmarks
 select_landmarks=torch.from_numpy(np.array([11556,8792,6265,8437,5732,4727,2687,739,2645,753],np.int64)).to(device)
 
@@ -69,13 +65,9 @@ with open('body_finger_ear_vids.txt','r') as ff:
 	checks_not_hands=torch.from_numpy(checks_not_hands).to(device)
 
 weights=list(zip([20,10,1,0,0,0],[20,10,1,0,0,0],
-# [500,900,400,100.,10.,0.],
 [1000,2000,400,100.,10.,0.],
 [200,200,600,700,800,850],
-#not accurate
 [0.15,0.18,0.18,0.20,0.20,0.20],
-# #more accurate landmarks
-# [0.1,0.1,0.15,0.18,0.20,0.20],
 [-1,-1,40,15,5,2.],
 [3,3,-1,-1,-1,-1]))
 unreal_pose_w=200
@@ -133,25 +125,8 @@ def unrealistic_pose_loss(ske_fs):
 	loss+=unreal_loss(rR,0,1,1,-10,'maxer')
 	rR=Rs[:,2,:].matmul(Rs[:,4,:].permute(0,2,1))
 	loss+=unreal_loss(rR,0,1,1,0,'miner')
-	# loss+=unreal_loss(rR,0,1,2,0,'maxer')
-
-	# loss+=unreal_loss(-(rR[:,0,1]+math.sin(3./180.*np.pi)))
 	rR=Rs[:,3,:].matmul(Rs[:,5,:].permute(0,2,1))
 	loss+=unreal_loss(rR,0,1,1,0,'miner')
-	# loss+=unreal_loss(rR,0,1,2,0,'miner')
-
-	# rR=Rs[:,13,:].matmul(Rs[:,12,:].permute(0,2,1))
-	# loss+=unreal_loss(rR,0,1,1,-10,'maxer')
-	# rR=Rs[:,14,:].matmul(Rs[:,12,:].permute(0,2,1))
-	# loss+=unreal_loss(rR,0,1,1,-10,'maxer')	
-	# rR=Rs[:,4,:].matmul(Rs[:,6,:].permute(0,2,1))
-	# loss+=unreal_loss(rR,2,1,2,10,'maxer')
-	# loss+=unreal_loss(rR,0,1,1,-8,'maxer')
-	# rR=Rs[:,5,:].matmul(Rs[:,6,:].permute(0,2,1))
-	# loss+=unreal_loss(rR,2,-1,2,-10,'miner')
-	# loss+=unreal_loss(rR,0,1,1,-8,'maxer')
-	# rR=Rs[:,6,:].matmul(Rs[:,11,:].permute(0,2,1))
-	# loss+=unreal_loss(rR,0,1,1,-20,'maxer')
 	return loss
 def pose_prior(ps):
 	return U.Geman_McClure_Loss(F.relu(torch.abs(ps)-1.5),0.5).mean(1)
@@ -241,7 +216,7 @@ def opt_rep_to_surface(ss,ps,tar_pt_points,tar_pt_norms,tar_pt_vnums,Rs,Ts,initR
 	Rs.requires_grad=True
 	optimizer=optim.Adam([ss,ps,Rs,Ts], lr=0.001)
 	time=0
-	while time<500:
+	while time<600:
 		regular_shape_loss=torch.pow(ss,2).sum()
 		regular_pose_loss=pose_prior(ps).sum()	
 		loss=r_ps_w*regular_pose_loss+r_ss_w*regular_shape_loss
@@ -287,16 +262,6 @@ def opt_rep_to_surface(ss,ps,tar_pt_points,tar_pt_norms,tar_pt_vnums,Rs,Ts,initR
 			print(out_info)
 		time+=1
 	return ss,ps,Rs,Ts
-
-# overlap=False
-# if not overlap:
-# 	valid_fs=[]
-# 	for f in obj_files:
-# 		if osp.isfile(osp.join(save_root,osp.splitext(osp.basename(f))[0]+'.obj')) and osp.isfile(osp.join(save_root,osp.splitext(osp.basename(f))[0]+'_wo.obj')):
-# 			print('already exist, skip '+f)
-# 			continue
-# 		valid_fs.append(f)
-# 	obj_files=valid_fs
 
 
 num=len(obj_files)
