@@ -18,3 +18,13 @@ The "exps" folder includes sample codes with test data of several experiments de
 - DFaustFit: A sample code of the DFaust registration experiment.
 - FaustAlign: A sample code of Faust alignment experiment.
 - BodyFrom2DJoints: A sample code of 3D body pose estimation from 2D joints.
+## Citation
+Please cite the following paper if it helps your research: 
+ ```
+ @article{Jiang2020HumanBody,
+      title={Disentangled Human Body Embedding Based on Deep Hierarchical Neural Network},
+      author={Jiang, Boyi and Zhang, Juyong and Cai, Jianfei and Zheng, Jianmin},
+      booktitle={IEEE Transactions on Visualization and Computer Graphics},
+      year={2020}
+}
+ ```
