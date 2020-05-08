@@ -1,0 +1,1 @@
+this code is the ours_e model implementation of 3D body pose estimation from 2D joints. We give the S9_SittingDown sequence of H3.6M as an example. The input is 2D joints estimated by DeepCut. The corresponding reference video can be downloaded in https://drive.google.com/file/d/1lTEbwfVogfDwX9HOrI4TnbWF2HPZWuIH/view?usp=sharing.
